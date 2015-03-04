@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>no-sucky-socks</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+
+	<link href='http://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+	
+</head>
+<body>
+	<h1>
+		<p>No sucky socks!</p>
+	</h1>
+	<table id="employees">
+		<tr><td>Laddar</td></tr>
+	</table>
+	<h2>
+		<p>Dagens no sucky socks</p>
+	</h2>
+	<div class="instafeed-container">
+		<div id="instafeed">
+		</div>
+	</div>
+
+	<script src="https://cdn.firebase.com/js/client/2.2.1/firebase.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+	<script type="text/javascript" src="instafeed.js"></script>
+
+	<script type="text/javascript">
+
+		var noSuckySocksFirebaseRef = new Firebase('https://no-sucky-socks.firebaseio.com');
+
+		 var feed = new Instafeed({
+	        get: 'tagged',
+	        tagName: 'nosuckysocks',
+	        clientId: '0ac89918cdbf4e51906c0b33013803c7',
+	        limit: 6
+	    });
+
+	    feed.run();
+
+
+		noSuckySocksFirebaseRef.child("employees").on("value", function(snapshot) {
+  			var employees = snapshot.val();  // Alerts "San Francisco"	
+
+  			var $employeesEl = $('#employees');
+
+  			var html = '';
+
+  			employees.sort(function(a, b) {
+  				return a.score < b.score;
+  			})
+
+  			html = employees.map(function(employee) {
+  				return '<tr><td>' + employee.name  + '</td><td> ' + employee.score + ' </td></tr>'
+  			});
+
+
+
+  			$employeesEl.html(html);
+
+		});
+
+
+	</script>
+
+</body>
+</html>	
